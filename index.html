@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<body onload="startTime(),currentdate()">
+<title>TIME CONVERTER</title>
+<div class="bimage">
+<marquee direction = "right"><h1>TIME ZONE CONVERTER</h1></marquee><hr class="fortn">
+<div class="fontt">
+<h2>Indian standard time(IST)</h2>
+<u><p>Date:</p></u><div id="date"></div>
+<u><p>Time:</p></u><div id="txt"></div><br><br><br>
+
+<div id="ConversionResultsDIV"></div> 
+<p>Convert the time from IST to: </p>
+<form name="form1" class="formr"> 
+
+  <select size="5" name="lstCity" onchange="updateTimeZone();"> 
+  <option value="60" selected>Berlin 
+  <option value="330">Bombay 
+  <option value="0">London 
+  <option value="180">Moscow 
+  <option value="-300">New York (EST) 
+  </select> 
+</form>
+</div></div>
+<script>
+var timeDiff;
+var selectedCity;
+var daylightSavingsAdjust = 0;
+
+function updateTimeZone(){
+  var lstCity = document.form1.lstCity;
+  timeDiff = lstCity.options[lstCity.selectedIndex].value;
+  selectedCity = lstCity.options[lstCity.selectedIndex].text;
+  updateTime();
+}
+
+function getTimeString(dateObject){
+  var timeString;
+  var hours = dateObject.getHours();
+  if(hours < 10){
+    hours = "0" + hours;
+  }
+  
+  var minutes = dateObject.getMinutes();
+  if(minutes<10){
+    minutes = "0" + minutes;
+  }
+  
+  var seconds = dateObject.getSeconds();
+  if(seconds<10){
+    seconds ="0" + seconds;
+  }
+  
+  timeString = hours + ":" + minutes + ":" + seconds;
+  return timeString;
+}
+  
+function updateTime(){
+  var nowTime = new Date();
+  var resultsText = "<p>Local Time is " + getTimeString(nowTime) + "</p>";
+  
+  nowTime.setMinutes(nowTime.getMinutes() + nowTime.getTimezoneOffset() + parseInt(timeDiff) + daylightSavingsAdjust);
+  
+  resultsText += "<p>" + selectedCity + " time is "+ getTimeString(nowTime) 
+  + "</p>";
+  
+  document.getElementById("ConversionResultsDIV").innerHTML = resultsText;
+}
+
+function chkDaylightSaving_onclick(){
+  if(document.form1.chkDaylightSaving.checked){
+    daylightSavingsAdjust = 60;
+  }
+  
+  else{
+    daylightSavingsAdjust = 0;
+  }
+  
+  updateTime(); 
+}
+function startTime() {
+  const today = new Date();
+  let h = today.getHours();
+  let m = today.getMinutes();
+  let s = today.getSeconds();
+  m = checkTime(m);
+  s = checkTime(s);
+  document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
+  setTimeout(startTime, 1000);
+
+}
+
+function currentdate(){n =  new Date();
+y = n.getFullYear();
+m = n.getMonth() + 1;
+d = n.getDate();
+
+document.getElementById("date").innerHTML = d + "/" + m + "/" + y;}
+function checkTime(i) {
+  if (i < 10) {i = "0" + i}; 
+  return i;
+}
+</script>
+
+<style>
+div
+{
+    display: inline-block;
+}
+.fortn{height:2px;border-width:0;color:red;background-color:black;
+}
+.bimage{background-image:url("https://www.thoughtco.com/thmb/SDZDZCyHoJyhR-GRgGqM4mX1wuY=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/129917122-58b9cefe3df78c353c389ff3.jpg");
+height: 100%;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+.fontt {
+background-color: rgb(101,158,199);  
+  background-color: rgba(101,158,199,0.5);
+color: black;
+  font-weight: bold;
+
+font-size: 25px;
+font-family: "Times New Roman", Times, serif;
+ 
+ border-style: double;
+  border-color: black;
+padding: 200px 0;
+
+text-align: normal;
+width:50%;
+margin-top: 60px;
+  margin-bottom: 100px;
+  margin-right: 200px;
+  margin-left: 200px; 
+  padding: 100px;
+height: 70%;
+}
+.formr{
+
+  margin-right: 150px;
+  margin-left: 300px; 
+  padding: 10px;
+}
+}
+</style>
+</body>
+</html>
